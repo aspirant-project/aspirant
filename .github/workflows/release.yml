@@ -16,6 +16,9 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Download workflow run details
         run: |
