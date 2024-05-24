@@ -54,7 +54,8 @@ jobs:
       # Note that the space after the last double dash (--) is intentional
       run: >
         dotnet test 
-        --logger console --logger trx --logger html --logger GitHubActions
+        --logger console --logger trx --logger html
+        --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
         --results-directory ./TestResults --blame
         -- 
         RunConfiguration.CollectSourceInformation=true
