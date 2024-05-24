@@ -5,7 +5,7 @@ namespace SamplesTests.Tests;
 public class YarpResource
 {
     [Fact]
-    public async Task GetWebResourceRootReturnsOkStatusCode()
+    public async Task GetAppsThroughYarpIngressResourceReturnsOkStatusCode()
     {
         // Arrange
         var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.YarpResource_AppHost>();
