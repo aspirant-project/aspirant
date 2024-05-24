@@ -44,5 +44,6 @@ jobs:
       - name: Delete old packages
         uses: smartsquaregmbh/delete-old-packages@v0.8.0
         with:
+          type: nuget
           keep: 5
           names: ${{ env.PACKAGE_ID }}
