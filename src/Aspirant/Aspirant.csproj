@@ -10,6 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+      <PackageReference Include="Aspire.Hosting" />
+      <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" />
+      <PackageReference Include="Yarp.ReverseProxy" />
       <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
