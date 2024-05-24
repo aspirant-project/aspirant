@@ -24,7 +24,12 @@ public class YarpResourceSample(ITestOutputHelper testOutputHelper)
         }
         appHost.Services.ConfigureHttpClientDefaults(options =>
         {
-            options.AddStandardResilienceHandler();
+            options.AddStandardResilienceHandler(options =>
+            {
+                options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(60);
+                options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(360);
+                options.CircuitBreaker.SamplingDuration = options.AttemptTimeout.Timeout * 2;
+            });
         });
         
         await using var app = await appHost.BuildAsync();
