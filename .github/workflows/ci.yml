@@ -44,6 +44,7 @@ jobs:
       - name: Delete old packages
         uses: smartsquaregmbh/delete-old-packages@v0.8.0
         with:
+          organization: ${{ github.repository_owner }}
           type: nuget
           keep: 5
           names: ${{ env.PACKAGE_ID }}
