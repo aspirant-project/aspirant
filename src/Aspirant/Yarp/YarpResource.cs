@@ -1,4 +1,5 @@
-﻿using Aspire.Hosting.ApplicationModel;
+﻿using System.Linq;
+using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Lifecycle;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -91,7 +92,7 @@ public class YarpResource(string name) : Resource(name), IResourceWithServiceDis
     // YARP configuration
     internal Dictionary<string, RouteConfig> RouteConfigs { get; } = [];
     internal Dictionary<string, ClusterConfig> ClusterConfigs { get; } = [];
-    internal List<EndpointAnnotation> Endpoints { get; } = [];
+    //internal List<EndpointAnnotation> Endpoints { get; } = [];
     internal string? ConfigurationSectionName { get; set; }
 }
 
@@ -128,8 +129,9 @@ internal class YarpResourceLifecyclehook(
 
         foreach (var b in bindings)
         {
-            yarpResource.Annotations.Remove(b);
-            yarpResource.Endpoints.Add(b);
+            //yarpResource.Annotations.Remove(b);
+            b.IsProxied = false;
+            //yarpResource.Endpoints.Add(b);
         }
     }
 
@@ -200,24 +202,29 @@ internal class YarpResourceLifecyclehook(
 
         _app = builder.Build();
 
-        if (yarpResource.Endpoints.Count == 0)
+        var urlToEndpointNameMap = new Dictionary<string, string>();
+
+        var defaultScheme = Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Contains("https://") == true ? "https" : "http";
+
+        if (!yarpResource.TryGetEndpoints(out var endpoints))
         {
-            _app.Urls.Add($"http://127.0.0.1:0");
+            var url = "http://127.0.0.1:0";
+            _app.Urls.Add(url);
+            urlToEndpointNameMap[url] = "default";
         }
         else
         {
-            foreach (var ep in yarpResource.Endpoints)
+            foreach (var ep in endpoints)
             {
-                var scheme = ep.UriScheme ?? "http";
+                var scheme = ep.UriScheme ?? defaultScheme;
+                var url = ep.Port switch
+                {
+                    null => $"{scheme}://127.0.0.1:0",
+                    _ => $"{scheme}://localhost:{ep.Port}"
+                };
 
-                if (ep.Port is null)
-                {
-                    _app.Urls.Add($"{scheme}://127.0.0.1:0");
-                }
-                else
-                {
-                    _app.Urls.Add($"{scheme}://localhost:{ep.Port}");
-                }
+                _app.Urls.Add(url);
+                urlToEndpointNameMap[new Uri(url).ToString()] = ep.Name;
             }
         }
 
@@ -225,12 +232,27 @@ internal class YarpResourceLifecyclehook(
 
         await _app.StartAsync(cancellationToken);
 
-        var urls = _app.Services.GetRequiredService<IServer>().Features.GetRequiredFeature<IServerAddressesFeature>().Addresses;
+        var addresses = _app.Services.GetRequiredService<IServer>().Features.GetRequiredFeature<IServerAddressesFeature>().Addresses;
+
+        // Update the EndpointAnnotations with the allocated URLs from ASP.NET Core
+        foreach (var url in addresses)
+        {
+            if (urlToEndpointNameMap.TryGetValue(new Uri(url).ToString(), out var name)
+                || urlToEndpointNameMap.TryGetValue((new UriBuilder(url) { Port = 0 }).Uri.ToString(), out name))
+            {
+                var ep = endpoints?.FirstOrDefault(ep => ep.Name == name);
+                if (ep is not null)
+                {
+                    var uri = new Uri(url);
+                    ep.AllocatedEndpoint = new(ep, uri.Host, uri.Port);
+                }
+            }
+        }
 
         await resourceNotificationService.PublishUpdateAsync(yarpResource, s => s with
         {
             State = "Running",
-            Urls = [.. urls.Select(u => new UrlSnapshot(u, u, IsInternal: false))]
+            Urls = [.. endpoints?.Select(ep => new UrlSnapshot(ep.Name, ep.AllocatedEndpoint?.UriString ?? "", IsInternal: false))],
         });
     }
 

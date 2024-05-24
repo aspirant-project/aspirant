@@ -2,7 +2,8 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SamplesTests.Tests;
-public class YarpResource
+
+public class YarpResourceSample
 {
     [Fact]
     public async Task GetAppsThroughYarpIngressResourceReturnsOkStatusCode()
@@ -17,7 +18,7 @@ public class YarpResource
         await app.StartAsync();
 
         // Act
-        var httpClient = app.CreateHttpClient("ingress");
+        var httpClient = app.CreateHttpClient("ingress", "http");
 
         var app1Response = await httpClient.GetAsync("/app1");
         Assert.Equal(HttpStatusCode.OK, app1Response.StatusCode);
