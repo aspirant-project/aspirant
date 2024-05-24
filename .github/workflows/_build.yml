@@ -38,7 +38,21 @@ jobs:
       run: dotnet build --configuration Release --no-restore -p:BuildNumber=$BUILD_NUMBER -p:SourceRevisionId=$GITHUB_SHA -p:ContinuousIntegrationBuild=true
 
     - name: Test
-      run: dotnet test --configuration Release --no-restore --no-build
+      id: test
+      # Note that the space after the last double dash (--) is intentional
+      run: >
+        dotnet test 
+        --logger console --logger trx --logger html --logger GitHubActions
+        --results-directory ./TestResults --blame
+        -- 
+        RunConfiguration.CollectSourceInformation=true
+    
+    - name: Updload artifacts (test results)
+      if: (success() || steps.test.conclusion == 'failure')
+      uses: actions/upload-artifact@v4
+      with:
+        name: TestResults
+        path: ./TestResults
 
     # - name: Publish samples
     #   run: |
