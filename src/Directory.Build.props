@@ -1,0 +1,24 @@
+<Project>
+
+  <PropertyGroup>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <!-- VersionSuffix used for local builds -->
+    <VersionSuffix>dev</VersionSuffix>
+    <!-- VersionSuffix to be used for CI builds -->
+    <VersionSuffix Condition=" '$(ContinuousIntegrationBuild)' == 'true' And '$(BuildNumber)' != '' ">ci.$(BuildNumber)</VersionSuffix>
+    <VersionSuffix Condition=" '$(ContinuousIntegrationBuild)' == 'true' And '$(IsShipCandidate)' == 'true' "></VersionSuffix>
+    <!--<VersionSuffix Condition=" '$(ContinuousIntegrationBuild)' == 'true' And '$(IsShipCandidate)' == 'true' ">pre.$(BuildNumber)</VersionSuffix>-->
+    <Authors>Aspirant Contributors</Authors>
+    <Copyright>Copyright © Aspirant Contributors</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/aspirant-project/aspirant</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aspirant-project/aspirant</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IsPackable>true</IsPackable>
+    <DebugType>embedded</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
