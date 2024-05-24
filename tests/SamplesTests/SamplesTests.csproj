@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
-    <Compile Include="..\Shared\Infrastructure\**\*.cs" LinkBase="Infrastructure" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Aspire.Hosting.Testing" />
     <PackageReference Include="coverlet.collector">
       <PrivateAssets>all</PrivateAssets>
@@ -30,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\samples\YarpResource\YarpResource.AppHost\YarpResource.AppHost.csproj" />
+    <ProjectReference Include="..\..\src\Aspirant.Hosting.Testing.xunit\Aspirant.Hosting.Testing.xunit.csproj" />
   </ItemGroup>
 
   <ItemGroup>

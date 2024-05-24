@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Aspirant\Aspirant.csproj" IsAspireProjectResource="False" />
+    <ProjectReference Include="..\..\..\src\Aspirant.Hosting.Yarp\Aspirant.Hosting.Yarp.csproj" IsAspireProjectResource="False" />
     <ProjectReference Include="..\WebApplication1\WebApplication1.csproj" />
     <ProjectReference Include="..\WebApplication2\WebApplication2.csproj" />
   </ItemGroup>

@@ -1,8 +1,8 @@
 using System.Net;
-using IntegrationTests.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Aspirant.Hosting.Testing;
 using Xunit.Abstractions;
 
 namespace SamplesTests.Tests;

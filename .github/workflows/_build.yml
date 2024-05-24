@@ -12,6 +12,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build & Test
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
 
     steps:
     - uses: actions/checkout@v4
@@ -33,9 +40,14 @@ jobs:
         buildNumber=$now.$GITHUB_RUN_NUMBER
         echo "BUILD_NUMBER=$buildNumber" >> $GITHUB_ENV
         echo "$buildNumber"
-
+    
     - name: Build
-      run: dotnet build --configuration Release --no-restore -p:BuildNumber=$BUILD_NUMBER -p:SourceRevisionId=$GITHUB_SHA -p:ContinuousIntegrationBuild=true
+      run: >-
+        dotnet build
+        --configuration Release
+        -p:BuildNumber=$BUILD_NUMBER
+        -p:SourceRevisionId=$GITHUB_SHA
+        -p:ContinuousIntegrationBuild=true
 
     - name: Test
       id: test
@@ -64,11 +76,26 @@ jobs:
     #     ./artifacts/Samples.Console/Samples.Console "MiniValidation"
       
     - name: Pack (ci)
-      run: dotnet pack --configuration Release --output ./artifacts/ci --verbosity normal -p:BuildNumber=$BUILD_NUMBER -p:SourceRevisionId=$GITHUB_SHA -p:ContinuousIntegrationBuild=true
+      run: >-
+        dotnet pack
+        --configuration Release
+        --output ./artifacts/ci
+        --verbosity normal
+        -p:BuildNumber=$BUILD_NUMBER
+        -p:SourceRevisionId=$GITHUB_SHA
+        -p:ContinuousIntegrationBuild=true
 
     - name: Pack (ship candidate)
       if: ${{ inputs.packShipCandidate }}
-      run: dotnet pack --configuration Release --output ./artifacts/ship --verbosity normal -p:BuildNumber=$BUILD_NUMBER -p:SourceRevisionId=$GITHUB_SHA -p:ContinuousIntegrationBuild=true -p:IsShipCandidate=true
+      run: >-
+        dotnet pack
+        --configuration Release
+        --output ./artifacts/ship
+        --verbosity normal
+        -p:BuildNumber=$BUILD_NUMBER
+        -p:SourceRevisionId=$GITHUB_SHA
+        -p:ContinuousIntegrationBuild=true
+        -p:IsShipCandidate=true
 
     - name: Upload artifacts (packages)
       uses: actions/upload-artifact@v4

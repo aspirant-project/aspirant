@@ -2,7 +2,7 @@
 using Aspire.Hosting.ApplicationModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Aspire.Hosting;
+namespace Aspirant.Hosting;
 
 /// <summary>
 /// An annotation that associates a health check factory with a resource
