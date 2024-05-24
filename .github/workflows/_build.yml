@@ -36,9 +36,6 @@ jobs:
 
     - name: Build
       run: dotnet build --configuration Release --no-restore -p:BuildNumber=$BUILD_NUMBER -p:SourceRevisionId=$GITHUB_SHA -p:ContinuousIntegrationBuild=true
-    
-    - name: Print dir tree
-      run: ls -R
 
     - name: Test
       id: test
