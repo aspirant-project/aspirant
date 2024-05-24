@@ -21,6 +21,9 @@ jobs:
       with:
         global-json-file: "./global.json"
     
+    - name: Install Aspire workload
+      run: dotnet workload install aspire
+
     - name: Restore dependencies
       run: dotnet restore
       
