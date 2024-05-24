@@ -44,7 +44,7 @@ jobs:
       id: test
       # Note that the space after the last double dash (--) is intentional
       run: >
-        dotnet test --configuration Release
+        dotnet test 
         --logger console --logger trx --logger html --logger GitHubActions
         --results-directory ./TestResults --blame
         -- 
