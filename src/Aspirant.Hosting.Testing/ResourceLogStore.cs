@@ -1,10 +1,11 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+﻿using System.Collections.Concurrent;
+using Aspire.Hosting.ApplicationModel;
 
-using System.Collections.Concurrent;
+namespace Aspirant.Hosting.Testing;
 
-namespace IntegrationTests.Infrastructure;
-
+/// <summary>
+/// 
+/// </summary>
 public class ResourceLogStore
 {
     private readonly ConcurrentDictionary<IResource, List<LogLine>> _logs = [];

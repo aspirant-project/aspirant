@@ -15,6 +15,13 @@ jobs:
   push-package:
     name: Release
     runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
 
     permissions:
       contents: write
@@ -38,30 +45,58 @@ jobs:
           workflow_conclusion: success
           name: nupkg
       
-      - name: Get package version into an environment variable
-        run: |
-          _filepath="$(find ./ship -iname $PACKAGE_ID.*.nupkg)"
-          _filename="${_filepath##*/}"
-          _pkgname="${_filename%.*}"
-          _version="${_pkgname##$PACKAGE_ID.}"
-          echo "PACKAGE_VERSION=${_version}" >> $GITHUB_ENV
-          echo "PACKAGE_FILEPATH=${_filepath}" >> $GITHUB_ENV
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
 
-      - name: Verify package version doesn't exist
+      - name: Add nuget.org source
+        run: dotnet nuget add source --name NUGET https://www.nuget.org
+
+      - name: Push packages to nuget.org
         run: |
-          _packageId="$PACKAGE_ID"
-          _packageVersion="$PACKAGE_VERSION"
-          _packageIdLower="${_packageId,,}"
-          _packageUrl="https://api.nuget.org/v3/registration5-semver1/${_packageIdLower}/${_packageVersion}.json"
-          echo "Checking for existing package at ${_packageUrl}"
-          _statusCode=$(curl -s -o /dev/null -I -w '%{http_code}' "${_packageUrl}")
-          if [ $_statusCode == "200" ]; then
-            echo "The package ${_packageId} with version ${_packageVersion} already exists on nuget.org"; exit 1
-          elif [ $_statusCode == "404" ]; then
-            echo "Confirmed package ${_packageId} with version ${_packageVersion} does not already exist on nuget.org"
-          else
-            echo "Unexpected status code ${_statusCode} received from nuget.org"; exit 1
-          fi
+            _filepaths=$(find ./ship -iname "*.nupkg")
+            _releaseVersion=""
+            for f in ${_filepaths};
+            do
+                echo "Found package $f"
+                # strip dir path from file path
+                _filename="${f##*/}"
+                # strip file extension from file name
+                _filenamewithoutext="${_filename%.*}"
+                # get version from file name
+                _packageVersion=$( \
+                    echo "$_filenamewithoutext" | \
+                    # Regex to match semantic version at end of string
+                    grep -oP '(?<=\.)[0-9]+\.[0-9]+\.[0-9]+((-[a-zA-Z]+)?(\.[0-9]+)*)*$' \
+                )
+                # get package id by truncating the version from the file name
+                _packageId="${_filenamewithoutext%%.$_version}"
+                # verify all packages have the same version
+                if [ $_releaseVersion != "" ] && [ $_packageVersion != $_releaseVersion ] ; then
+                    # mulitple package versions detected
+                    echo "Multiple package versions detected. Expected '${_releaseVersion}' but found '${_packageVersion}' for '${_packageId}'."; exit 1
+                else
+                    _releaseVersion=$_packageVersion
+                fi
+                # verify package doesn't already exist
+                _packageIdLower="${_packageId,,}"
+                _packageUrl="https://api.nuget.org/v3/registration5-semver1/${_packageIdLower}/${_packageVersion}.json"
+                echo "Checking for existing package at ${_packageUrl}"
+                _statusCode=$(curl -s -o /dev/null -I -w '%{http_code}' "${_packageUrl}")
+                if [ $_statusCode == "200" ]; then
+                    echo "The package ${_packageId} with version ${_packageVersion} already exists on nuget.org"; exit 1
+                elif [ $_statusCode == "404" ]; then
+                    echo "Confirmed package ${_packageId} with version ${_packageVersion} does not already exist on nuget.org"
+                else
+                    echo "Unexpected status code ${_statusCode} received from nuget.org"; exit 1
+                fi
+            done;
+            # push packages to nuget
+            for f in ${_filepaths};
+            do
+                dotnet nuget push "$f" -s "NUGET" -k ${{ secrets.NUGET_API_KEY }}
+            done;
+            # store package version in an environment variable for release step
+            echo "PACKAGE_VERSION=${_releaseVersion}" >> $GITHUB_ENV
 
       - name: Create release
         uses: ncipollo/release-action@v1
@@ -71,12 +106,3 @@ jobs:
           generateReleaseNotes: true
           draft: true
           prerelease: ${{ contains(env.PACKAGE_VERSION, '-') }}
-
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-
-      - name: Add nuget.org source
-        run: dotnet nuget add source --name NUGET https://www.nuget.org
-
-      - name: Push to nuget.org
-        run: dotnet nuget push "$PACKAGE_FILEPATH" -s "NUGET" -k ${{ secrets.NUGET_API_KEY }}

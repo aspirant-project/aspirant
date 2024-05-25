@@ -1,16 +1,15 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
+﻿using Aspire.Hosting;
+using Aspire.Hosting.ApplicationModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace IntegrationTests.Infrastructure;
+namespace Aspirant.Hosting.Testing;
 
 /// <summary>
 /// A background service that watches for resource start/stop notifications and logs resource state changes.
 /// </summary>
-internal sealed class ResourceWatcher(
+public sealed class ResourceWatcher(
     DistributedApplicationModel appModel,
     ResourceNotificationService resourceNotification,
     ResourceLoggerService resourceLoggerService,
@@ -26,6 +25,7 @@ internal sealed class ResourceWatcher(
     private readonly TaskCompletionSource _resourcesStartedTcs = new();
     private readonly TaskCompletionSource _resourcesStoppedTcs = new();
 
+    /// <inheritdoc/>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         logger.LogInformation("Resource watcher started");
@@ -44,14 +44,23 @@ internal sealed class ResourceWatcher(
         logger.LogInformation("Resource watcher stopped");
     }
 
+    /// <inheritdoc/>
     public override void Dispose()
     {
         _resourcesStartedTcs.TrySetException(new DistributedApplicationException("Resource watcher was disposed while waiting for resources to start, likely due to a timeout"));
         _resourcesStoppedTcs.TrySetException(new DistributedApplicationException("Resource watcher was disposed while waiting for resources to stop, likely due to a timeout"));
     }
 
+    /// <summary>
+    /// Waits for all resources to start.
+    /// </summary>
+    /// <returns></returns>
     public Task WaitForResourcesToStart() => _resourcesStartedTcs.Task;
 
+    /// <summary>
+    /// Waits for all resources to stop.
+    /// </summary>
+    /// <returns></returns>
     public Task WaitForResourcesToStop() => _resourcesStoppedTcs.Task;
 
     private async Task WatchNotifications(CancellationToken cancellationToken)

@@ -1,18 +1,20 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
-using IntegrationTests.Infrastructure;
+using Aspire.Hosting;
+using Aspire.Hosting.ApplicationModel;
+using Aspire.Hosting.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace IntegrationTests.Infrastructure;
+namespace Aspirant.Hosting.Testing;
 
+/// <summary>
+/// Extensions for configuring a <see cref="DistributedApplication"/> for testing.
+/// </summary>
 public static partial class DistributedApplicationExtensions
 {
     internal const string OutputWriterKey = $"{nameof(DistributedApplicationExtensions)}.OutputWriter";
@@ -30,7 +32,7 @@ public static partial class DistributedApplicationExtensions
     }
 
     /// <summary>
-    /// Fixes the <see cref="IHostEnvironment.ContentRootPath" /> and <see cref="IHostEnvironment.ContentRootFileProvider" /> to match the app host's directory.
+    /// Fixes the <see cref="IHostEnvironment.ContentRootPath" /> and <see cref="IHostEnvironment.ContentRootFileProvider" /> to match the app host's directory.<br/>
     /// Workaround for https://github.com/dotnet/aspire/issues/4286
     /// </summary>
     public static TBuilder FixContentRoot<TBuilder>(this TBuilder builder)
@@ -176,6 +178,12 @@ public static partial class DistributedApplicationExtensions
         await resourcesStartingTask;
     }
 
+    /// <summary>
+    /// Gets the logs for the application host.
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public static LoggerLogStore GetAppHostLogs(this DistributedApplication app)
     {
         var logStore = app.Services.GetService<LoggerLogStore>()

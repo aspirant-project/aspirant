@@ -24,6 +24,13 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
 
     permissions:
       packages: write
@@ -42,9 +49,8 @@ jobs:
         run: dotnet nuget push **/ci/*.nupkg --source "GPR" --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete old packages
-        uses: smartsquaregmbh/delete-old-packages@v0.8.0
+        uses: actions/delete-package-versions@v4
         with:
-          organization: ${{ github.repository_owner }}
-          type: nuget
-          keep: 5
-          names: ${{ env.PACKAGE_ID }}
+          min-versions-to-keep: 5
+          package-type: 'nuget'
+          package-name: '${{ env.PACKAGE_ID }}'
