@@ -49,7 +49,7 @@ jobs:
         run: dotnet nuget push **/ci/*.nupkg --source "GPR" --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete old packages
-        uses: actions/delete-package-versions@v4
+        uses: actions/delete-package-versions@v5
         with:
           min-versions-to-keep: 5
           package-type: 'nuget'
