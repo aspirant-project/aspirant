@@ -11,6 +11,7 @@
     <Authors>Aspirant Contributors</Authors>
     <Copyright>Copyright © Aspirant Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon Condition=" '$(PackageIcon)' == '' ">aspirant_icon_256.png</PackageIcon>
     <PackageProjectUrl>https://github.com/aspirant-project/aspirant</PackageProjectUrl>
     <RepositoryUrl>https://github.com/aspirant-project/aspirant</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
