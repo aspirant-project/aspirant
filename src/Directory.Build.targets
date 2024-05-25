@@ -1,7 +1,8 @@
 <Project>
 
   <ItemGroup>
-    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../Shared/aspirant_icon_256.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 
 </Project>
