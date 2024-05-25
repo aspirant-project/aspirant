@@ -4,12 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>A set of useful extensions for .NET Aspire App Host xUnit.net testing projects.</Description>
+    <PackageTags>aspire hosting testing xunit</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Aspire.Hosting.Testing" />
-      <PackageReference Include="xunit" />
-      <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

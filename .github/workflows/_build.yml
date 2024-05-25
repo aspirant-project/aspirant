@@ -53,7 +53,7 @@ jobs:
       id: test
       # Note that the space after the last double dash (--) is intentional
       run: >
-        dotnet test 
+        dotnet test ./tests/Samples.Tests/Samples.Tests.csproj
         --logger console --logger trx --logger html
         --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
         --results-directory ./TestResults --blame
