@@ -53,7 +53,7 @@ jobs:
       id: test
       # Note that the space after the last double dash (--) is intentional
       run: >
-        dotnet test ./tests/SamplesTests/SamplesTests.csproj
+        dotnet test
         --logger console --logger trx --logger html
         --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
         --results-directory ./TestResults --blame
@@ -72,9 +72,8 @@ jobs:
     #     for projectPath in ./samples/**/*.csproj ; do
     #       projectFileName=${projectPath##*/}
     #       projectName=${projectFileName%.*}
-    #       dotnet publish "$projectPath" --output "./artifacts/$projectName" --configuration Release --no-build --verbosity normal
+    #       dotnet publish "$projectPath" --output "./artifacts/$projectName" --configuration Release --verbosity normal
     #     done;
-    #     ./artifacts/Samples.Console/Samples.Console "MiniValidation"
       
     - name: Pack (ci)
       run: >-
