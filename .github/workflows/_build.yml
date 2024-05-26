@@ -42,8 +42,8 @@ jobs:
         echo "$buildNumber"
     
     - name: Build
-      run: >-
-        dotnet build
+      run: >
+        dotnet build --no-restore
         --configuration Release
         -p:BuildNumber=$BUILD_NUMBER
         -p:SourceRevisionId=$GITHUB_SHA
@@ -53,7 +53,7 @@ jobs:
       id: test
       # Note that the space after the last double dash (--) is intentional
       run: >
-        dotnet test
+        dotnet test --no-restore
         --logger console --logger trx --logger html
         --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
         --results-directory ./TestResults --blame
