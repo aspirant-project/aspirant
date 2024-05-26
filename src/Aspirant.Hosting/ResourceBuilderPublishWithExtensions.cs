@@ -4,10 +4,51 @@ using Aspire.Hosting.ApplicationModel;
 namespace Aspirant.Hosting;
 
 /// <summary>
-/// <c>PublishWithEnvironment</c> Extension methods for <see cref="IResourceBuilder{TResource}"/>.
+/// <c>PublishWith</c> extension methods for <see cref="IResourceBuilder{TResource}"/>.
 /// </summary>
-public static class ResourceBuilderPublishWithEnvironmentExtensions
+public static class ResourceBuilderPublishWithExtensions
 {
+/// <summary>
+    /// Adds an annotation to the resource being built when <see cref="DistributedApplicationExecutionContext.IsPublishMode"/> is <c>true</c>.
+    /// </summary>
+    /// <typeparam name="TResource">The resource type.</typeparam>
+    /// <typeparam name="TAnnotation">The annotation type.</typeparam>
+    /// <param name="builder">The resource builder.</param>
+    /// <param name="behavior">The behavior to use when adding the annotation.</param>
+    /// <returns>The resource builder.</returns>
+    public static IResourceBuilder<TResource> PublishWithAnnotation<TResource, TAnnotation>(this IResourceBuilder<TResource> builder, ResourceAnnotationMutationBehavior behavior = ResourceAnnotationMutationBehavior.Append)
+        where TResource : IResource
+        where TAnnotation : IResourceAnnotation, new()
+    {
+        if (builder.ApplicationBuilder.ExecutionContext.IsPublishMode)
+        {
+            builder.WithAnnotation<TAnnotation>(behavior);
+        }
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds an annotation to the resource being built when <see cref="DistributedApplicationExecutionContext.IsPublishMode"/> is <c>true</c>.
+    /// </summary>
+    /// <typeparam name="TResource">The resource type.</typeparam>
+    /// <typeparam name="TAnnotation">The annotation type.</typeparam>
+    /// <param name="builder">The resource builder.</param>
+    /// <param name="annotation">The annotation to add.</param>
+    /// <param name="behavior">The behavior to use when adding the annotation.</param>
+    /// <returns>The resource builder.</returns>
+    public static IResourceBuilder<TResource> PublishWithAnnotation<TResource, TAnnotation>(this IResourceBuilder<TResource> builder, TAnnotation annotation, ResourceAnnotationMutationBehavior behavior = ResourceAnnotationMutationBehavior.Append)
+        where TResource : IResource
+        where TAnnotation : IResourceAnnotation, new()
+    {
+        if (builder.ApplicationBuilder.ExecutionContext.IsPublishMode)
+        {
+            builder.WithAnnotation(annotation, behavior);
+        }
+
+        return builder;
+    }
+
     /// <summary>
     /// Allows for the population of environment variables on a resource when <see cref="DistributedApplicationExecutionContext.IsPublishMode"/> is <c>true</c>.
     /// </summary>
