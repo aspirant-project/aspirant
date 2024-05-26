@@ -4,9 +4,9 @@ using Aspire.Hosting.ApplicationModel;
 namespace Aspirant.Hosting;
 
 /// <summary>
-/// <c>PublishWith</c> extension methods for <see cref="IResourceBuilder{TResource}"/>.
+/// Extension methods for <see cref="IResourceBuilder{TResource}"/>.
 /// </summary>
-public static class ResourceBuilderPublishWithExtensions
+public static partial class ResourceBuilderExtensions
 {
 /// <summary>
     /// Adds an annotation to the resource being built when <see cref="DistributedApplicationExecutionContext.IsPublishMode"/> is <c>true</c>.

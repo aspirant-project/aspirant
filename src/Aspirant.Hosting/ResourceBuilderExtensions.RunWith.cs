@@ -3,10 +3,7 @@ using Aspire.Hosting.ApplicationModel;
 
 namespace Aspirant.Hosting;
 
-/// <summary>
-/// <c>RunWith</c> extension methods for <see cref="IResourceBuilder{TResource}"/>.
-/// </summary>
-public static class ResourceBuilderRunWithExtensions
+public static partial class ResourceBuilderExtensions
 {
     /// <summary>
     /// Adds an annotation to the resource being built when <see cref="DistributedApplicationExecutionContext.IsRunMode"/> is <c>true</c>.

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,10 +7,44 @@ namespace Aspirant.Hosting.UnitTests;
 public class RunWithTests
 {
     [Fact]
+    public void AnnotationAddedWhenRunning()
+    {
+        var builder = DistributedApplication.CreateBuilder();
+        var runWithAnnotation = new TestAnnotation();
+        var resource = builder.AddResource(new TestResource("resourceA"))
+            .WithAnnotation<TestAnnotation>()
+            .RunWithAnnotation(runWithAnnotation);
+
+        using var app = builder.Build();
+        var appModel = app.Services.GetRequiredService<DistributedApplicationModel>();
+        var resourceA = appModel.Resources.First(p => p.Name == "resourceA");
+
+        var annotations = resourceA.Annotations.OfType<TestAnnotation>();
+        Assert.Contains(runWithAnnotation, annotations);
+    }
+
+    [Fact]
+    public void AnnotationNotAddedWhenPublishing()
+    {
+        var builder = DistributedApplication.CreateBuilder(["Publishing:Publisher=manifest"]);
+        var runWithAnnotation = new TestAnnotation();
+        var resource = builder.AddResource(new TestResource("resourceA"))
+            .WithAnnotation<TestAnnotation>()
+            .RunWithAnnotation(runWithAnnotation);
+
+        using var app = builder.Build();
+        var appModel = app.Services.GetRequiredService<DistributedApplicationModel>();
+        var resourceA = appModel.Resources.First(p => p.Name == "resourceA");
+
+        var annotations = resourceA.Annotations.OfType<TestAnnotation>();
+        Assert.DoesNotContain(runWithAnnotation, annotations);
+    }
+
+    [Fact]
     public void SimpleEnvironmentWithNameAndValueAddedWhenRunning()
     {
         var builder = DistributedApplication.CreateBuilder();
-        var resource = builder.AddResource(new ResourceA("resourceA"))
+        var resource = builder.AddResource(new TestResource("resourceA"))
             .WithEnvironment("first", "firstValue")
             .RunWithEnvironment("myName", "value");
 
@@ -27,7 +60,7 @@ public class RunWithTests
     public void SimpleEnvironmentWithNameAndValueNotAddedWhenPublishing()
     {
         var builder = DistributedApplication.CreateBuilder(["Publishing:Publisher=manifest"]);
-        var resource = builder.AddResource(new ResourceA("resourceA"))
+        var resource = builder.AddResource(new TestResource("resourceA"))
             .WithEnvironment("first", "firstValue")
             .RunWithEnvironment("myName", "value");
 
@@ -56,10 +89,15 @@ public class RunWithTests
         return environmentVariables;
     }
 
-    private sealed class ResourceA(string name) : IResourceWithEnvironment
+    private sealed class TestResource(string name) : IResourceWithEnvironment
     {
         public string Name => name;
 
         public ResourceAnnotationCollection Annotations { get; } = [];
+    }
+
+    private sealed class TestAnnotation : IResourceAnnotation
+    {
+        
     }
 }
