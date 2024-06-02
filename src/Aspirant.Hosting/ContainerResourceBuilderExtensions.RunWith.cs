@@ -3,9 +3,6 @@ using Aspire.Hosting;
 
 namespace Aspirant.Hosting;
 
-/// <summary>
-/// Extension methods for <see cref="IResourceBuilder{ContainerResource}"/>.
-/// </summary>
 public static partial class ContainerResourceBuilderExtensions
 {
     /// <summary>
