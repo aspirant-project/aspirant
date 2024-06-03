@@ -46,7 +46,7 @@ jobs:
           name: nupkg
       
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
 
       - name: Add nuget.org source
         run: dotnet nuget add source --name NUGET https://www.nuget.org
