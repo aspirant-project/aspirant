@@ -19,7 +19,12 @@ public class YarpResource(string name) : WebApplicationResource(name)
     internal string? ConfigurationSectionName { get; set; }
 }
 
-internal class YarpResourceLifecycleHook(IHostEnvironment hostEnvironment, DistributedApplicationExecutionContext executionContext, ResourceNotificationService resourceNotificationService, ResourceLoggerService resourceLoggerService) : WebApplicationResourceLifecycleHook<YarpResource>(hostEnvironment, executionContext, resourceNotificationService, resourceLoggerService)
+internal class YarpResourceLifecycleHook(
+    IHostEnvironment hostEnvironment,
+    DistributedApplicationExecutionContext executionContext,
+    ResourceNotificationService resourceNotificationService,
+    ResourceLoggerService resourceLoggerService)
+    : WebApplicationResourceLifecycleHook<YarpResource>(hostEnvironment, executionContext, resourceNotificationService, resourceLoggerService)
 {
     protected override string ResourceTypeName { get; } = "Yarp";
 
