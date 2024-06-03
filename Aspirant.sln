@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspirant.Hosting.Redis", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspirant.Hosting.SqlServer", "src\Aspirant.Hosting.SqlServer\Aspirant.Hosting.SqlServer.csproj", "{135004A9-F7E0-46D9-B3D0-3D64BA3C40B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspirant.Hosting.PostgreSQL", "src\Aspirant.Hosting.PostgreSQL\Aspirant.Hosting.PostgreSQL.csproj", "{77D17495-C537-4446-8C2E-8B46560E0992}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,10 @@ Global
 		{135004A9-F7E0-46D9-B3D0-3D64BA3C40B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{135004A9-F7E0-46D9-B3D0-3D64BA3C40B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{135004A9-F7E0-46D9-B3D0-3D64BA3C40B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77D17495-C537-4446-8C2E-8B46560E0992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77D17495-C537-4446-8C2E-8B46560E0992}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77D17495-C537-4446-8C2E-8B46560E0992}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77D17495-C537-4446-8C2E-8B46560E0992}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{C298B315-F532-4135-8B56-40CCE3AD3B82} = {25313666-00D4-4FD9-9759-49D96BE94BEC}
 		{1A0397EA-A6C6-468B-A111-253EE6EA17A1} = {6E773CFD-9758-4C09-96F6-5EDCED0E3A34}
 		{135004A9-F7E0-46D9-B3D0-3D64BA3C40B9} = {6E773CFD-9758-4C09-96F6-5EDCED0E3A34}
+		{77D17495-C537-4446-8C2E-8B46560E0992} = {6E773CFD-9758-4C09-96F6-5EDCED0E3A34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52627286-38AF-4E95-BDA0-B21166B2B18C}

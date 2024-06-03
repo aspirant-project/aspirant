@@ -7,6 +7,7 @@
     <!-- Aspire -->
     <PackageVersion Include="Aspire.Hosting" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="$(AspireVersion)" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Redis" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.SqlServer" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="$(AspireVersion)" />
@@ -20,10 +21,12 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.8.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.1" />
+    <!-- Healthchecks -->
+    <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.1" />
+    <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
     <!-- Misc -->
     <PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
     <!-- Testing -->
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
