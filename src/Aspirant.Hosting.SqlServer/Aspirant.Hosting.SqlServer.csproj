@@ -4,15 +4,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Description>A set of useful extensions and experiments for Redis for .NET Aspire App Host projects.</Description>
-    <PackageTags>aspire hosting redis</PackageTags>
+    <Description>A set of useful extensions and experiments for Microsoft SQL Server for .NET Aspire App Host projects.</Description>
+    <PackageTags>aspire hosting sqlserver sql</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Aspirant.Hosting\Aspirant.Hosting.csproj" />
-    <PackageReference Include="Aspire.Hosting.Redis" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
-    <PackageReference Include="AspNetCore.HealthChecks.Redis" />
   </ItemGroup>
 
 </Project>
