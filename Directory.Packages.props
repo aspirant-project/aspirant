@@ -23,6 +23,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.1" />
     <!-- Healthchecks -->
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.1" />
+    <PackageVersion Include="AspNetCore.HealthChecks.Redis" Version="8.0.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
     <!-- Misc -->
     <PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
