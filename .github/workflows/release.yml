@@ -69,9 +69,9 @@ jobs:
                     grep -oP '(?<=\.)[0-9]+\.[0-9]+\.[0-9]+((-[a-zA-Z]+)?(\.[0-9]+)*)*$' \
                 )
                 # get package id by truncating the version from the file name
-                _packageId="${_filenamewithoutext%%.$_version}"
+                _packageId="${_filenamewithoutext%%.$_packageVersion}"
                 # verify all packages have the same version
-                if [ $_releaseVersion != "" ] && [ $_packageVersion != $_releaseVersion ] ; then
+                if [[ $_releaseVersion != "" ]] && [[ $_packageVersion != $_releaseVersion ]]; then
                     # mulitple package versions detected
                     echo "Multiple package versions detected. Expected '${_releaseVersion}' but found '${_packageVersion}' for '${_packageId}'."; exit 1
                 else
@@ -82,9 +82,9 @@ jobs:
                 _packageUrl="https://api.nuget.org/v3/registration5-semver1/${_packageIdLower}/${_packageVersion}.json"
                 echo "Checking for existing package at ${_packageUrl}"
                 _statusCode=$(curl -s -o /dev/null -I -w '%{http_code}' "${_packageUrl}")
-                if [ $_statusCode == "200" ]; then
+                if [[ $_statusCode == "200" ]]; then
                     echo "The package ${_packageId} with version ${_packageVersion} already exists on nuget.org"; exit 1
-                elif [ $_statusCode == "404" ]; then
+                elif [[ $_statusCode == "404" ]]; then
                     echo "Confirmed package ${_packageId} with version ${_packageVersion} does not already exist on nuget.org"
                 else
                     echo "Unexpected status code ${_statusCode} received from nuget.org"; exit 1
