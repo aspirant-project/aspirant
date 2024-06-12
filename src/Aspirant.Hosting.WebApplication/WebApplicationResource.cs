@@ -113,74 +113,74 @@ public abstract class WebApplicationResourceLifecycleHook<TResource>(
             }
 
             builder.Configuration.AddInMemoryCollection(dict);
-
-            await ConfigureBuilderAsync(builder, resource, cancellationToken);
-
-            resource.TryGetEndpoints(out var endpoints);
-            var defaultScheme = Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Contains("https://") == true ? "https" : "http";
-            var needHttps = defaultScheme == "https" || endpoints?.Any(ep => ep.UriScheme == "https") == true;
-
-            if (needHttps)
-            {
-                builder.WebHost.UseKestrelHttpsConfiguration();
-            }
-
-            _app = builder.Build();
-
-            var urlToEndpointNameMap = new Dictionary<string, string>();
-
-            if (endpoints is null)
-            {
-                var url = $"{defaultScheme}://127.0.0.1:0/";
-                _app.Urls.Add(url);
-                urlToEndpointNameMap[url] = "default";
-            }
-            else
-            {
-                foreach (var ep in endpoints)
-                {
-                    var scheme = ep.UriScheme ?? defaultScheme;
-                    needHttps = needHttps || scheme == "https";
-
-                    var url = ep.Port switch
-                    {
-                        null => $"{scheme}://127.0.0.1:0/",
-                        _ => $"{scheme}://localhost:{ep.Port}"
-                    };
-
-                    var uri = new Uri(url);
-                    _app.Urls.Add(url);
-                    urlToEndpointNameMap[uri.ToString()] = ep.Name;
-                }
-            }
-
-            await ConfigureApplicationAsync(_app, resource, cancellationToken);
-
-            await _app.StartAsync(cancellationToken);
-
-            var addresses = _app.Services.GetRequiredService<IServer>().Features.GetRequiredFeature<IServerAddressesFeature>().Addresses;
-
-            foreach (var url in addresses)
-            {
-                if (urlToEndpointNameMap.TryGetValue(new Uri(url).ToString(), out var name)
-                    || urlToEndpointNameMap.TryGetValue((new UriBuilder(url) { Port = 0 }).Uri.ToString(), out name))
-                {
-                    var ep = endpoints?.FirstOrDefault(ep => ep.Name == name);
-                    if (ep is not null)
-                    {
-                        var uri = new Uri(url);
-                        var host = uri.Host is "127.0.0.1" or "[::1]" ? "localhost" : uri.Host;
-                        ep.AllocatedEndpoint = new(ep, host, uri.Port);
-                    }
-                }
-            }
-
-            await resourceNotificationService.PublishUpdateAsync(resource, s => s with
-            {
-                State = "Running",
-                Urls = [.. endpoints?.Select(ep => new UrlSnapshot(ep.Name, ep.AllocatedEndpoint?.UriString ?? "", IsInternal: false))],
-            });
         }
+
+        await ConfigureBuilderAsync(builder, resource, cancellationToken);
+
+        resource.TryGetEndpoints(out var endpoints);
+        var defaultScheme = Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Contains("https://") == true ? "https" : "http";
+        var needHttps = defaultScheme == "https" || endpoints?.Any(ep => ep.UriScheme == "https") == true;
+
+        if (needHttps)
+        {
+            builder.WebHost.UseKestrelHttpsConfiguration();
+        }
+
+        _app = builder.Build();
+
+        var urlToEndpointNameMap = new Dictionary<string, string>();
+
+        if (endpoints is null)
+        {
+            var url = $"{defaultScheme}://127.0.0.1:0/";
+            _app.Urls.Add(url);
+            urlToEndpointNameMap[url] = "default";
+        }
+        else
+        {
+            foreach (var ep in endpoints)
+            {
+                var scheme = ep.UriScheme ?? defaultScheme;
+                needHttps = needHttps || scheme == "https";
+
+                var url = ep.Port switch
+                {
+                    null => $"{scheme}://127.0.0.1:0/",
+                    _ => $"{scheme}://localhost:{ep.Port}"
+                };
+
+                var uri = new Uri(url);
+                _app.Urls.Add(url);
+                urlToEndpointNameMap[uri.ToString()] = ep.Name;
+            }
+        }
+
+        await ConfigureApplicationAsync(_app, resource, cancellationToken);
+
+        await _app.StartAsync(cancellationToken);
+
+        var addresses = _app.Services.GetRequiredService<IServer>().Features.GetRequiredFeature<IServerAddressesFeature>().Addresses;
+
+        foreach (var url in addresses)
+        {
+            if (urlToEndpointNameMap.TryGetValue(new Uri(url).ToString(), out var name)
+                || urlToEndpointNameMap.TryGetValue((new UriBuilder(url) { Port = 0 }).Uri.ToString(), out name))
+            {
+                var ep = endpoints?.FirstOrDefault(ep => ep.Name == name);
+                if (ep is not null)
+                {
+                    var uri = new Uri(url);
+                    var host = uri.Host is "127.0.0.1" or "[::1]" ? "localhost" : uri.Host;
+                    ep.AllocatedEndpoint = new(ep, host, uri.Port);
+                }
+            }
+        }
+
+        await resourceNotificationService.PublishUpdateAsync(resource, s => s with
+        {
+            State = "Running",
+            Urls = [.. endpoints?.Select(ep => new UrlSnapshot(ep.Name, ep.AllocatedEndpoint?.UriString ?? "", IsInternal: false))],
+        });
     }
 
     protected abstract ValueTask ConfigureBuilderAsync(WebApplicationBuilder builder, TResource resource, CancellationToken cancellationToken);
