@@ -4,20 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Description>A custom YARP ingress resource for .NET Aspire App Host projects.</Description>
-    <PackageTags>aspire hosting yarp proxy</PackageTags>
+    <Description>A custom ASP.NET Core web app resource for .NET Aspire App Host projects.</Description>
+    <PackageTags>aspire hosting aspnet aspnetcore</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
       <PackageReference Include="Aspire.Hosting" />
-      <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" />
-      <PackageReference Include="Yarp.ReverseProxy" />
       <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Aspirant.Hosting\Aspirant.Hosting.csproj" />
-    <ProjectReference Include="..\Aspirant.Hosting.WebApplication\Aspirant.Hosting.WebApplication.csproj" />
   </ItemGroup>
 
 </Project>
