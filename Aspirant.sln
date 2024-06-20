@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspirant.Hosting.PostgreSQL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspirant.Hosting.RabbitMQ", "src\Aspirant.Hosting.RabbitMQ\Aspirant.Hosting.RabbitMQ.csproj", "{45EC9DE1-B3E7-4EF4-A0AA-8CD7230EB7FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspirant.Hosting.IISExpress", "src\Aspirant.Hosting.IISExpress\Aspirant.Hosting.IISExpress.csproj", "{A66C0A1E-B3F4-4C66-8873-024F09DB4002}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{45EC9DE1-B3E7-4EF4-A0AA-8CD7230EB7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45EC9DE1-B3E7-4EF4-A0AA-8CD7230EB7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45EC9DE1-B3E7-4EF4-A0AA-8CD7230EB7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A66C0A1E-B3F4-4C66-8873-024F09DB4002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A66C0A1E-B3F4-4C66-8873-024F09DB4002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A66C0A1E-B3F4-4C66-8873-024F09DB4002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A66C0A1E-B3F4-4C66-8873-024F09DB4002}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,6 +136,7 @@ Global
 		{135004A9-F7E0-46D9-B3D0-3D64BA3C40B9} = {6E773CFD-9758-4C09-96F6-5EDCED0E3A34}
 		{77D17495-C537-4446-8C2E-8B46560E0992} = {6E773CFD-9758-4C09-96F6-5EDCED0E3A34}
 		{45EC9DE1-B3E7-4EF4-A0AA-8CD7230EB7FB} = {6E773CFD-9758-4C09-96F6-5EDCED0E3A34}
+		{A66C0A1E-B3F4-4C66-8873-024F09DB4002} = {6E773CFD-9758-4C09-96F6-5EDCED0E3A34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52627286-38AF-4E95-BDA0-B21166B2B18C}
